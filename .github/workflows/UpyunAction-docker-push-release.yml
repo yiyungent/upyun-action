@@ -19,7 +19,7 @@ jobs:
         run: |
           #echo ::set-output name=RELEASE_VERSION::$(echo ${GITHUB_REF:10})
           # 去掉前面的 refs/tags/UpyunAction-
-          echo ::set-output name=RELEASE_VERSION::$(echo ${GITHUB_REF:24})
+          echo ::set-output name=RELEASE_VERSION::$(echo ${GITHUB_REF:22})
           echo ::set-output name=IMAGE_NAME::upyun-action
 
       - name: Build Image
