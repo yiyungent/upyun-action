@@ -44,7 +44,7 @@ runs:
     # References a docker public registry action
     - name: Docker run
       id: docker-action
-      uses: docker://gcr.io/yiyungent/upyun-action
+      uses: docker://ghcr.io/yiyungent/upyun-action
       with:
         upyun_token: ${{ inputs.upyun_token }}
         refresh_cache_urls: ${{ inputs.refresh_cache_urls }}
