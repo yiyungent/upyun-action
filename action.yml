@@ -49,4 +49,6 @@ runs:
         upyun_token: ${{ inputs.upyun_token }}
         refresh_cache_urls: ${{ inputs.refresh_cache_urls }}
 
-
+branding:
+  icon: "cloud"
+  color: "white"
