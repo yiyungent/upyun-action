@@ -6,26 +6,36 @@ namespace UpyunAction // Note: actual namespace depends on the project name.
     {
         public static void Main(string[] args)
         {
-            WriteLine($"Hello World!");
+            Utils.LogUtil.Info($"Hello upyun-action!");
 
-            WriteLine($"args: {string.Join(", ", args)}");
+            #region Debug
+            Utils.LogUtil.Info($"args: {string.Join(", ", args)}");
 
             var envKeys = Environment.GetEnvironmentVariables().Keys;
             foreach (var key in envKeys)
             {
-                WriteLine($"Environment: {key}");
+                Utils.LogUtil.Info($"Environment: {key}");
             }
 
+            // 注意: 当没有这个环境变量时, 不会报错, 而是返回空字符串
+            //WriteLine($"Environment: INPUT_UPYUN_TOKEN: {Environment.GetEnvironmentVariable("INPUT_UPYUN_TOKEN")}");
+            //Console.WriteLine("::set-output name=upyun_response::strawberry"); 
+            #endregion
 
-            WriteLine($"Environment: INPUT_UPYUN_TOKEN: {Environment.GetEnvironmentVariable("INPUT_UPYUN_TOKEN")}");
+            UpyunApi upyunApi = new UpyunApi();
+            string upyunToken = Utils.GitHubActionsUtil.GetEnv("upyun_token");
+            if (!string.IsNullOrEmpty(upyunToken))
+            {
+                upyunApi.Token = upyunToken;
+            }
 
-            Console.WriteLine("::set-output name=upyun_response::strawberry");
+            string refreshCacheUrls = Utils.GitHubActionsUtil.GetEnv("refresh_cache_urls");
+            if (!string.IsNullOrEmpty(refreshCacheUrls))
+            {
+                // 刷新缓存
+                upyunApi.CacheBatchRefresh(refreshCacheUrls);
+            }
 
-        }
-
-        public static void WriteLine(string message)
-        {
-            Console.WriteLine($"UpyunAction {DateTime.Now}: {message}");
         }
 
     }
