@@ -18,7 +18,7 @@ jobs:
         id: test
         uses: ./ # Uses an action in the root directory
         with:
-          upyun_token: "weqeqwe"
+          upyun_token: "test-token"
 
 
       # Use the output from the `test` step

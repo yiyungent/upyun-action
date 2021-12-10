@@ -20,12 +20,20 @@ namespace UpyunAction // Note: actual namespace depends on the project name.
             // 注意: 当没有这个环境变量时, 不会报错, 而是返回空字符串
             //WriteLine($"Environment: INPUT_UPYUN_TOKEN: {Environment.GetEnvironmentVariable("INPUT_UPYUN_TOKEN")}");
             //Console.WriteLine("::set-output name=upyun_response::strawberry"); 
+
             #endregion
 
             UpyunApi upyunApi = new UpyunApi();
             string upyunToken = Utils.GitHubActionsUtil.GetEnv("upyun_token");
             if (!string.IsNullOrEmpty(upyunToken))
             {
+                #region Test Action
+                if (upyunToken == "test-token")
+                {
+                    Utils.GitHubActionsUtil.SetOutput("upyun_response", "strawberry");
+                }
+                #endregion
+
                 upyunApi.Token = upyunToken;
             }
 
