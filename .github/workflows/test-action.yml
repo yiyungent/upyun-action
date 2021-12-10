@@ -1,0 +1,26 @@
+name: Test Action
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # To use this repository's private action,
+      # you must check out the repository
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Test Action
+        id: test
+        uses: ./ # Uses an action in the root directory
+        with:
+          upyun_token: "weqeqwe"
+
+
+      # Use the output from the `test` step
+      - name: Get the output upyun_response
+        run: echo "The output was ${{ steps.test.outputs.upyun_response }}"
+

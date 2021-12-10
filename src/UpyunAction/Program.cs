@@ -18,6 +18,9 @@ namespace UpyunAction // Note: actual namespace depends on the project name.
 
 
             WriteLine($"Environment: INPUT_UPYUN_TOKEN: {Environment.GetEnvironmentVariable("INPUT_UPYUN_TOKEN")}");
+
+            Console.WriteLine("::set-output name=upyun_response::strawberry");
+
         }
 
         public static void WriteLine(string message)
