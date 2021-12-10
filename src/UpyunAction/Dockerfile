@@ -17,4 +17,5 @@ RUN dotnet publish "UpyunAction.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "UpyunAction.dll"]
+# 注意: 由于 GitHub Actions 会设置 GITHUB_WORKSPACE 为工作目录, 因此使用绝对路径
+ENTRYPOINT ["dotnet", "/app/UpyunAction.dll"]
