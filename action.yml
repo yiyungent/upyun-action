@@ -19,7 +19,7 @@ inputs:
     default: ""
     required: true
 
-  upyun_refresh_cache_urls:
+  refresh_cache_urls:
     description: "Refresh Urls"
     default: ""
     required: false
