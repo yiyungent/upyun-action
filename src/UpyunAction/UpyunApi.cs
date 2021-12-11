@@ -36,7 +36,7 @@ namespace UpyunAction
                 Utils.LogUtil.Exception(ex);
             }
 
-            if (!resJsonStr.Contains("\"code\": 1"))
+            if (!resJsonStr.Contains("刷新成功"))
             {
                 // 刷新失败
                 Utils.LogUtil.Error("刷新失败:");
