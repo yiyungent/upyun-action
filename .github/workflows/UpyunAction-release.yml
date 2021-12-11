@@ -3,7 +3,7 @@ name: UpyunAction Release
 on: 
   push:
     tags:
-      - 'UpyunAction-v*'
+      - 'v*'
 
 jobs:
   build:

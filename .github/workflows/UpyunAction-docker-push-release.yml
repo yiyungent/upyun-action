@@ -5,7 +5,7 @@ on:
 #    types: [published]
   push:
     tags:
-      - 'UpyunAction-v*'
+      - 'v*'
 
 jobs:
   # build and push
@@ -18,8 +18,8 @@ jobs:
         id: vars
         run: |
           #echo ::set-output name=RELEASE_VERSION::$(echo ${GITHUB_REF:10})
-          # 去掉前面的 refs/tags/UpyunAction-
-          echo ::set-output name=RELEASE_VERSION::$(echo ${GITHUB_REF:22})
+          # 去掉前面的 refs/tags/
+          echo ::set-output name=RELEASE_VERSION::$(echo ${GITHUB_REF:10})
           echo ::set-output name=IMAGE_NAME::upyun-action
 
       - name: Build Image
