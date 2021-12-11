@@ -18,6 +18,11 @@ namespace UpyunAction // Note: actual namespace depends on the project name.
 
         public static UpyunApi UpyunApi { get; set; }
 
+        /// <summary>
+        /// 本次执行 成功获取到的 UpyunTokenName
+        /// </summary>
+        public static string CurrentUpyunTokenName { get; set; }
+
         public static void Main(string[] args)
         {
             Utils.LogUtil.Info($"Hello upyun-action!");
@@ -52,26 +57,25 @@ namespace UpyunAction // Note: actual namespace depends on the project name.
             string userName = Utils.GitHubActionsUtil.GetEnv(EnvKeyUpyunUserName);
             string password = Utils.GitHubActionsUtil.GetEnv(EnvKeyUpyunPassword);
             CreateTokenResponseModel createTokenResponseModel = null;
-            string upyunTokenName = string.Empty;
             for (int i = 1; i <= 10; i++)
             {
                 // 尝试 10 次, 因为 又拍云只允许创建10个token
-                upyunTokenName = $"{UpyunTokenName}-{i}";
+                CurrentUpyunTokenName = $"{UpyunTokenName}-{i}";
                 // 相关token 最大允许 有效 6小时
                 // TODO: 是否存在 GitHub Actions 所在海外服务器 时区不一致导致时间戳 与 又拍云 不一致
                 //long expiredAt = Utils.DateTimeUtil.ToTimeStamp10(DateTime.Now.AddHours(6));
                 //createTokenResponseModel = UpyunApi.CreateTokenAsync(userName, password, upyunTokenName, "global", expiredAt: expiredAt).Result;
                 // 没有必要设置过期时间, 反正过期后, 并不是自动删除token, 还是需要手动删除
-                createTokenResponseModel = UpyunApi.CreateTokenAsync(userName, password, upyunTokenName, "global").Result;
+                createTokenResponseModel = UpyunApi.CreateTokenAsync(userName, password, CurrentUpyunTokenName, "global").Result;
                 if (createTokenResponseModel != null)
                 {
                     // 成功则 break
-                    Utils.LogUtil.Info($"成功创建相关 token: {upyunTokenName}");
+                    Utils.LogUtil.Info($"成功创建相关 token: {CurrentUpyunTokenName}");
                     break;
                 }
                 else
                 {
-                    Utils.LogUtil.Error($"失败创建相关 token: {upyunTokenName}");
+                    Utils.LogUtil.Error($"失败创建相关 token: {CurrentUpyunTokenName}");
                 }
             }
             if (createTokenResponseModel == null)
@@ -117,6 +121,11 @@ namespace UpyunAction // Note: actual namespace depends on the project name.
             {
                 if (item.name.StartsWith(UpyunTokenName))
                 {
+                    if (item.name == CurrentUpyunTokenName)
+                    {
+                        // 本次 token 最后删除, 用它 先删除其它相关token
+                        continue;
+                    }
                     // 删除所有 与 upyun-action 相关 token
                     var deleteModel = UpyunApi.DeleteTokenAsync(item.name).Result;
                     if (deleteModel.result)
@@ -128,6 +137,16 @@ namespace UpyunAction // Note: actual namespace depends on the project name.
                         Utils.LogUtil.Info($"失败: 删除 token: {item.name}");
                     }
                 }
+            }
+            // 最后删除自己
+            var finalDeleteModel = UpyunApi.DeleteTokenAsync(CurrentUpyunTokenName).Result;
+            if (finalDeleteModel.result)
+            {
+                Utils.LogUtil.Info($"成功: 删除 token: {CurrentUpyunTokenName}");
+            }
+            else
+            {
+                Utils.LogUtil.Info($"失败: 删除 token: {CurrentUpyunTokenName}");
             }
         }
         #endregion
