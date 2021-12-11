@@ -57,12 +57,21 @@ namespace UpyunAction // Note: actual namespace depends on the project name.
             {
                 // 尝试 10 次, 因为 又拍云只允许创建10个token
                 upyunTokenName = $"{UpyunTokenName}-{i}";
+                // 相关token 最大允许 有效 6小时
+                // TODO: 是否存在 GitHub Actions 所在海外服务器 时区不一致导致时间戳 与 又拍云 不一致
+                //long expiredAt = Utils.DateTimeUtil.ToTimeStamp10(DateTime.Now.AddHours(6));
+                //createTokenResponseModel = UpyunApi.CreateTokenAsync(userName, password, upyunTokenName, "global", expiredAt: expiredAt).Result;
+                // 没有必要设置过期时间, 反正过期后, 并不是自动删除token, 还是需要手动删除
                 createTokenResponseModel = UpyunApi.CreateTokenAsync(userName, password, upyunTokenName, "global").Result;
                 if (createTokenResponseModel != null)
                 {
                     // 成功则 break
-                    Utils.LogUtil.Info($"成功创建相关token: {upyunTokenName}");
+                    Utils.LogUtil.Info($"成功创建相关 token: {upyunTokenName}");
                     break;
+                }
+                else
+                {
+                    Utils.LogUtil.Error($"失败创建相关 token: {upyunTokenName}");
                 }
             }
             if (createTokenResponseModel == null)

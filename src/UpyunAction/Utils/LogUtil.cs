@@ -32,7 +32,7 @@ namespace UpyunAction.Utils
 
         public static void Exception(Exception ex)
         {
-            Error(ex.Message);
+            Error(ex.ToString());
             Exception exception = ex;
             while (exception.InnerException != null)
             {
