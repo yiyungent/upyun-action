@@ -14,10 +14,20 @@ inputs:
   #   default: ${{ github.repository }}
   #   required: false
 
-  upyun_token:
-    description: "upyun Token"
+  upyun_username:
+    description: "upyun username"
     default: ""
     required: true
+
+  upyun_password:
+    description: "upyun password"
+    default: ""
+    required: true
+
+  upyun_debug:
+    description: "enable debug"
+    default: false
+    required: false
 
   refresh_cache_urls:
     description: "Refresh Urls"
@@ -28,7 +38,7 @@ inputs:
 outputs:
   upyun_response:
     description: "upyun response"
-    value: ${{ steps.docker-action.outputs.upyun_response }}
+    value: ${{ steps.docker-upyun-action.outputs.upyun_response }}
 
 
 runs:
@@ -46,7 +56,9 @@ runs:
       id: docker-upyun-action
       uses: docker://ghcr.io/yiyungent/upyun-action
       with:
-        upyun_token: ${{ inputs.upyun_token }}
+        upyun_username: ${{ inputs.upyun_username }}
+        upyun_password: ${{ inputs.upyun_password }}
+        upyun_debug: ${{ inputs.upyun_debug }}
         refresh_cache_urls: ${{ inputs.refresh_cache_urls }}
 
 branding:

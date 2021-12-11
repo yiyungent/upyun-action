@@ -187,5 +187,86 @@ namespace UpyunAction.Utils
             return rtResult;
         }
         #endregion
+
+        #region HTTP Delete
+        public static string HttpDelete(string url, StringBuilder responseHeadersSb = null, string[] headers = null, WebProxy proxy = null)
+        {
+            string rtResult = string.Empty;
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                request.Method = "DELETE";
+                request.KeepAlive = false;
+
+                if (headers != null)
+                {
+                    foreach (string header in headers)
+                    {
+                        string[] temp = header.Split(new string[] { ": " }, StringSplitOptions.RemoveEmptyEntries);
+                        if (temp[0].Equals("Referer", StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            request.Referer = temp[1];
+                        }
+                        else if (temp[0].Equals("User-Agent", StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            request.UserAgent = temp[1];
+                        }
+                        else if (temp[0].Equals("Accept", StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            request.Accept = temp[1];
+                        }
+                        else if (temp[0].Equals("Connection", StringComparison.InvariantCultureIgnoreCase) && temp[1].Equals("keep-alive", StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            request.KeepAlive = true;
+                        }
+                        else if (temp[0].Equals("Connection", StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            request.KeepAlive = false;
+                        }
+                        else if (temp[0].Equals("Content-Type", StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            request.ContentType = temp[1];
+                        }
+                        else
+                        {
+                            request.Headers.Add(header);
+                        }
+                    }
+                }
+                if (proxy != null)
+                {
+                    request.Proxy = proxy;
+                }
+                request.Timeout = 10000;
+
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                if (responseHeadersSb != null)
+                {
+                    foreach (string name in response.Headers.AllKeys)
+                    {
+                        responseHeadersSb.AppendLine(name + ": " + response.Headers[name]);
+                    }
+                }
+                Stream responseStream = response.GetResponseStream();
+                //如果http头中接受gzip的话，这里就要判断是否为有压缩，有的话，直接解压缩即可 
+                if (response.Headers["Content-Encoding"] != null && response.Headers["Content-Encoding"].ToLower().Contains("gzip"))
+                {
+                    responseStream = new GZipStream(responseStream, CompressionMode.Decompress);
+                }
+                using (StreamReader sReader = new StreamReader(responseStream, System.Text.Encoding.UTF8))
+                {
+                    rtResult = sReader.ReadToEnd();
+                }
+                responseStream.Close();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return rtResult;
+        }
+        #endregion
+
     }
 }
