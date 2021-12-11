@@ -101,9 +101,10 @@ namespace UpyunAction
 
         public async Task<DeleteTokenResponseModel> DeleteTokenAsync(string name)
         {
-            string apiUrl = $"{this.BaseApiUrl}/oauth/tokens?name={name}";
             // TODO: 这里不知道 Default 是什么编码, 因此最好 name 全英文
-            apiUrl = System.Text.Encodings.Web.UrlEncoder.Default.Encode(apiUrl);
+            // 注意: 只需要对 name 编码即可 (即对 queryString 编码)，不要将 整个url编码
+            name = System.Text.Encodings.Web.UrlEncoder.Default.Encode(name);
+            string apiUrl = $"{this.BaseApiUrl}/oauth/tokens?name={name}";
             string[] headers = new string[] {
                 "Content-Type: application/json", // 注意: 不加上这个会导致 400
                 $"Authorization: Bearer {this.Token}",
