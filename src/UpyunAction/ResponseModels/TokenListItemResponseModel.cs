@@ -11,7 +11,7 @@ namespace UpyunAction.ResponseModels
         public string name { get; set; }
         public string scope { get; set; }
         public string[] services { get; set; }
-        public int created_at { get; set; }
-        public int expired_at { get; set; }
+        public long created_at { get; set; }
+        public long expired_at { get; set; }
     }
 }
