@@ -17,15 +17,7 @@ upyun | 非官方 | 又拍云 for GitHub Actions
 
 ## 使用
 
-### 1. 获取又拍云 token
-
-- [创建 又拍云 token](https://api.upyun.com/doc#/api/operation/oauth/POST%20%2Foauth%2Ftokens)
-
-![通过 Postman 创建又拍云 token](screenshots/1.png)
-
-> `access_token` 即为又拍云 token
-
-### 2. 创建 upyun-refresh.yml
+### 创建 upyun-refresh.yml
 
 > .github/workflows/upyun-refresh.yml
 
