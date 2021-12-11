@@ -92,12 +92,12 @@ jobs:
         FOLDER: public
 
     - name: Upyun Refresh
-        uses: yiyungent/upyun-action@main
-        with:
-          # 在 Settings->Secrets 配置 UPYUN_TOKEN
-          upyun_token: ${{ secrets.UPYUN_TOKEN }}
-          # 要刷新的url, 支持匹配符 *, 多个url中间用 \n 隔开
-          refresh_cache_urls: "https://moeci.com/*"
+      uses: yiyungent/upyun-action@main
+      with:
+        # 在 Settings->Secrets 配置 UPYUN_TOKEN
+        upyun_token: ${{ secrets.UPYUN_TOKEN }}
+        # 要刷新的url, 支持匹配符 *, 多个url中间用 \n 隔开
+        refresh_cache_urls: "https://moeci.com/*"
 
 ```
 
