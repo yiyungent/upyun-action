@@ -50,6 +50,57 @@ jobs:
 
 ```
 
+### 注意
+
+> 如果你使用的是 Hexo 等部署, 源代码在此仓库, 那么需要在部署完后再刷新缓存, 例如下方:       
+> 利用 GitHub Actions 发布 Hexo, 然后再刷新又拍云CDN   
+
+```yml
+name: Build and Deploy Hexo
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout 🛎️
+      uses: actions/checkout@master
+      
+    - name: Use Node.js 12
+      uses: actions/setup-node@v2-beta
+      with:
+        node-version: '12'
+
+    - name: Install Pandoc
+      run: |
+        sudo apt-get install pandoc
+        
+    - name: Install and Build 🔧 
+      run: |
+        npm install -g hexo-cli
+        npm install
+        hexo clean
+        hexo generate
+
+    - name: Deploy 🚀
+      uses: JamesIves/github-pages-deploy-action@3.7.1
+      with:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        BRANCH: gh-pages
+        FOLDER: public
+
+    - name: Upyun Refresh
+        uses: yiyungent/upyun-action@main
+        with:
+          # 在 Settings->Secrets 配置 UPYUN_TOKEN
+          upyun_token: ${{ secrets.UPYUN_TOKEN }}
+          # 要刷新的url, 支持匹配符 *, 多个url中间用 \n 隔开
+          refresh_cache_urls: "https://moeci.com/*"
+
+```
+
 
 
 ## Donate
