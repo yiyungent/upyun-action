@@ -23,7 +23,8 @@ namespace UpyunAction
             });
             // Authorization: Bearer <Token>
             string[] headers = new string[] {
-                $"Authorization: Bearer {this.Token}"
+                $"Authorization: Bearer {this.Token}",
+                "Content-Type: application/json"
             };
             string resJsonStr = string.Empty;
             try
