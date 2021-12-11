@@ -8,7 +8,12 @@
 
 ## 介绍
 
-使用 GitHub Actions 自动刷新又拍云CDN缓存
+upyun | 非官方 | 又拍云 for GitHub Actions
+
+## 功能
+
+- [x] 批量刷新缓存
+  - 利用 GitHub Actions 在更新博文等 后 立即刷新缓存
 
 ## 使用
 
